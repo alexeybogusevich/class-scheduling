@@ -18,22 +18,29 @@ namespace KNU.IS.ClassScheduling.Logic.Services
 
             foreach (var group in groups)
             {
+                sb.AppendLine(string.Concat(Enumerable.Repeat("-", 100)));
                 sb.AppendLine();
-                sb.AppendLine(group.Name);
+                sb.AppendLine($"\tГРУПА: {group.Name}");
                 sb.AppendLine();
 
-                var groupClasses = items.Where(c => c.Groups.Any(g => g.Id == group.Id))
+                var days = items.Where(c => c.Groups.Any(g => g.Id == group.Id))
                     .OrderBy(c => c.TimePeriod.Id)
+                    .GroupBy(c => c.TimePeriod.DayOfWeek)
                     .ToList();
 
                 var cultureInfo = CultureInfo.CurrentCulture;
 
-                foreach (var gclass in groupClasses)
+                foreach (var day in days)
                 {
                     sb.AppendLine();
-                    sb.AppendLine(GetLocalDayOfWeek(gclass.TimePeriod.DayOfWeek, cultureInfo).ToUpper());
-                    sb.AppendLine($"{gclass.TimePeriod.Period}. {gclass.Course.Name} ({(gclass.IsLecture ? "Л" : "П")}) ауд. {gclass.Room.Name} ({gclass.Instructor.Name})");
+                    sb.AppendLine($"\t{GetLocalDayOfWeek(day.Key, cultureInfo).ToUpper()}");
+                    foreach (var gClass in day)
+                    {
+                        sb.AppendLine($"\t{gClass.TimePeriod.Period}. {gClass.Course.Name} ({(gClass.IsLecture ? "Л" : "П")}) ауд. {gClass.Room.Name} ({gClass.Instructor.Name})");
+                    }
                 }
+
+                sb.AppendLine();
             }
 
             return sb.ToString();
