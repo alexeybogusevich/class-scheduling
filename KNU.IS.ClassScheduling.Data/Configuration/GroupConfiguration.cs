@@ -10,11 +10,11 @@ namespace KNU.IS.ClassScheduling.Data.Configuration
         {
             builder.HasData(
                 new Group() { Id = 1, Name = "K12", StudentsAmount = 20 },
-                new Group() { Id = 2, Name = "K14", StudentsAmount = 25 },
-                new Group() { Id = 3, Name = "K15", StudentsAmount = 28 },
+                new Group() { Id = 2, Name = "K15", StudentsAmount = 25 },
+                new Group() { Id = 3, Name = "K16", StudentsAmount = 28 },
                 new Group() { Id = 4, Name = "K22", StudentsAmount = 18 },
-                new Group() { Id = 5, Name = "K24", StudentsAmount = 23 },
-                new Group() { Id = 6, Name = "K25", StudentsAmount = 21 },
+                new Group() { Id = 5, Name = "K25", StudentsAmount = 23 },
+                new Group() { Id = 6, Name = "K26", StudentsAmount = 21 },
                 new Group() { Id = 7, Name = "ТТП3", StudentsAmount = 45 },
                 new Group() { Id = 8, Name = "МІ3", StudentsAmount = 24 },
                 new Group() { Id = 9, Name = "ТК3", StudentsAmount = 23 },

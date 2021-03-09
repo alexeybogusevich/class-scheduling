@@ -1,7 +1,6 @@
 ﻿using KNU.IS.ClassScheduling.Logic.Configuration;
 using KNU.IS.ClassScheduling.Logic.Interfaces;
 using KNU.IS.ClassScheduling.Logic.Models.Genetic;
-using KNU.IS.ClassScheduling.Logic.Models.Schedule;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;

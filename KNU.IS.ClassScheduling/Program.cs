@@ -33,7 +33,7 @@ namespace KNU.IS.ClassScheduling
                 .AddScoped<IAlgorithmOutputManager<ScheduledClass>, BaseScheduleOutputManager>()
                 .AddScoped<IAlgorithmRunner, GeneticAlgorithmRunner<ScheduledClass>>()
                 .AddScoped<IGeneticAlgorithm<ScheduledClass>, SchedulingGeneticAlgorithm>()
-                .AddScoped<IScheduleGenerator, RandomScheduleGenerator>()
+                .AddScoped<IScheduleManager, BaseScheduleManager>()
                 .Configure<GeneticOptions>(options => configuration.GetSection(nameof(GeneticOptions)).Bind(options))
                 .BuildServiceProvider();
 

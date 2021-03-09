@@ -11,56 +11,24 @@ namespace KNU.IS.ClassScheduling.Logic.Services
     public class SchedulingGeneticAlgorithm : IGeneticAlgorithm<ScheduledClass>
     {
         private readonly Random random;
-        private readonly IScheduleGenerator scheduleGenerator;
+        private readonly IScheduleManager scheduleManager;
 
-        public SchedulingGeneticAlgorithm(IScheduleGenerator scheduleGenerator)
+        public SchedulingGeneticAlgorithm(IScheduleManager scheduleManager)
         {
             this.random = new Random();
-            this.scheduleGenerator = scheduleGenerator;
+            this.scheduleManager = scheduleManager;
         }
 
         public async Task<Chromosome<ScheduledClass>> CreateChromosomeAsync()
         {
-            var scheduledClasses = await scheduleGenerator.GenerateAsync();
+            var scheduledClasses = await scheduleManager.GenerateAsync();
             var fitness = CalculateFitness(scheduledClasses);
             return new Chromosome<ScheduledClass>(scheduledClasses, fitness);
         }
 
         public double CalculateFitness(IEnumerable<ScheduledClass> scheduledClasses)
         {
-            int conflicts = 0;
-
-            foreach (var scheduledClass in scheduledClasses)
-            {
-                if (!scheduledClass.Instructor.IsLector && scheduledClass.IsLecture)
-                {
-                    conflicts += 1;
-                }
-
-                if (scheduledClass.Room.Capacity < scheduledClass.Groups.Sum(g => g.StudentsAmount))
-                {
-                    conflicts += 1;
-                }
-
-                conflicts += scheduledClasses.Where(c =>
-                    (c.Room.Id == scheduledClass.Room.Id ||
-                    c.Groups.Intersect(scheduledClass.Groups).Count() > 0 ||
-                    c.Instructor.Id == scheduledClass.Instructor.Id) &&
-                    c.TimePeriod.Id == scheduledClass.TimePeriod.Id &&
-                    c.Id != scheduledClass.Id).Count();
-
-                foreach (var g in scheduledClass.Groups)
-                {
-                    conflicts += scheduledClasses
-                        .Where(
-                            c => c.Groups.Contains(g) && 
-                            c.Course.Id == scheduledClass.Course.Id)
-                        .Count() > scheduledClass.Course.Hours 
-                        ? 
-                        1 : 0;
-                }
-            }
-
+            var conflicts = scheduleManager.GountConflicts(scheduledClasses);
             return 1 / (double)(conflicts + 1);
         }
 

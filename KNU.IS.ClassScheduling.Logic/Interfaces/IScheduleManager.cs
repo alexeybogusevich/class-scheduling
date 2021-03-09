@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 
 namespace KNU.IS.ClassScheduling.Logic.Interfaces
 {
-    public interface IScheduleGenerator
+    public interface IScheduleManager
     {
+        int GountConflicts(IEnumerable<ScheduledClass> scheduledClasses);
         Task<IEnumerable<ScheduledClass>> GenerateAsync();
     }
 }

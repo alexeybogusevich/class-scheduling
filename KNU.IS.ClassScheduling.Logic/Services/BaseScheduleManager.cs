@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace KNU.IS.ClassScheduling.Logic.Services
 {
-    public class RandomScheduleGenerator : IScheduleGenerator
+    public class BaseScheduleManager : IScheduleManager
     {
         public ApplicationContext context;
 
-        public RandomScheduleGenerator(ApplicationContext context)
+        public BaseScheduleManager(ApplicationContext context)
         {
             this.context = context;
         }
@@ -43,14 +43,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
                         Course = course
                     };
 
-                    if (course.HasPractice)
-                    {
-                        scheludedClass.IsLecture = random.Next(100) < 30;
-                    }
-                    else
-                    {
-                        scheludedClass.IsLecture = true;
-                    }
+                    scheludedClass.IsLecture = course.HasPractice ? random.Next(100) < 30 : true;
 
                     scheludedClass.Groups = course.CourceGroups
                         .Select(cg => cg.Group)
@@ -83,6 +76,44 @@ namespace KNU.IS.ClassScheduling.Logic.Services
             }
 
             return scheduledClasses;
+        }
+
+        public int GountConflicts(IEnumerable<ScheduledClass> scheduledClasses)
+        {
+            int conflicts = 0;
+
+            foreach (var scheduledClass in scheduledClasses)
+            {
+                if (!scheduledClass.Instructor.IsLector && scheduledClass.IsLecture)
+                {
+                    conflicts += 1;
+                }
+
+                if (scheduledClass.Room.Capacity < scheduledClass.Groups.Sum(g => g.StudentsAmount))
+                {
+                    conflicts += 1;
+                }
+
+                conflicts += scheduledClasses.Where(c =>
+                    (c.Room.Id == scheduledClass.Room.Id ||
+                    c.Groups.Intersect(scheduledClass.Groups).Count() > 0 ||
+                    c.Instructor.Id == scheduledClass.Instructor.Id) &&
+                    c.TimePeriod.Id == scheduledClass.TimePeriod.Id &&
+                    c.Id != scheduledClass.Id).Count();
+
+                foreach (var g in scheduledClass.Groups)
+                {
+                    conflicts += scheduledClasses
+                        .Where(
+                            c => c.Groups.Contains(g) &&
+                            c.Course.Id == scheduledClass.Course.Id)
+                        .Count() > scheduledClass.Course.Hours
+                        ?
+                        1 : 0;
+                }
+            }
+
+            return conflicts;
         }
     }
 }
