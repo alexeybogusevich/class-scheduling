@@ -11,6 +11,6 @@ namespace KNU.IS.ClassScheduling.Data.Models
 
         public virtual ICollection<CourseInstructor> CourseInstructors { get; set; } = new List<CourseInstructor>();
 
-        public virtual ICollection<CourseGroup> CourceGroups { get; set; } = new List<CourseGroup>();
+        public virtual ICollection<CourseGroup> CourseGroups { get; set; } = new List<CourseGroup>();
     }
 }

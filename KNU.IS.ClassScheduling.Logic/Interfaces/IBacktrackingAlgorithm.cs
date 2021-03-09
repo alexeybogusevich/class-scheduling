@@ -4,8 +4,8 @@ using System.Text;
 
 namespace KNU.IS.ClassScheduling.Logic.Interfaces
 {
-    public interface ICSPAlgorithm<T>
+    interface IBacktrackingAlgorithm
     {
-        T GetVariable();
+
     }
 }

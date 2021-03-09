@@ -56,7 +56,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
 
             var bestChromosome = sortedPopulation.First();
 
-            Console.WriteLine($"Generations passed: {generations}");
+            Console.WriteLine($"Кількість поколінь: {generations}\n");
             Console.WriteLine(outputManager.GetOutput(bestChromosome.Genes));
         }
 

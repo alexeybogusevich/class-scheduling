@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace KNU.IS.ClassScheduling.Logic.Services
 {
-    public class SchedulingGeneticAlgorithm : IGeneticAlgorithm<ScheduledClass>
+    public class ScheduleGeneticAlgorithm : IGeneticAlgorithm<ScheduledClass>
     {
         private readonly Random random;
         private readonly IScheduleManager scheduleManager;
 
-        public SchedulingGeneticAlgorithm(IScheduleManager scheduleManager)
+        public ScheduleGeneticAlgorithm(IScheduleManager scheduleManager)
         {
             this.random = new Random();
             this.scheduleManager = scheduleManager;
@@ -28,7 +28,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
 
         public double CalculateFitness(IEnumerable<ScheduledClass> scheduledClasses)
         {
-            var conflicts = scheduleManager.GountConflicts(scheduledClasses);
+            var conflicts = scheduleManager.CountConflicts(scheduledClasses);
             return 1 / (double)(conflicts + 1);
         }
 

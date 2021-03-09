@@ -27,7 +27,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
             var courses = await context.Courses
                 .Include(c => c.CourseInstructors)
                     .ThenInclude(ci => ci.Instructor)
-                .Include(c => c.CourceGroups)
+                .Include(c => c.CourseGroups)
                     .ThenInclude(cg => cg.Group)
                 .ToListAsync();
 
@@ -45,10 +45,10 @@ namespace KNU.IS.ClassScheduling.Logic.Services
 
                     scheludedClass.IsLecture = course.HasPractice ? random.Next(100) < 30 : true;
 
-                    scheludedClass.Groups = course.CourceGroups
+                    scheludedClass.Groups = course.CourseGroups
                         .Select(cg => cg.Group)
                         .OrderBy(_ => random.Next())
-                        .Take(random.Next(1, course.CourceGroups.Count))
+                        .Take(random.Next(1, course.CourseGroups.Count))
                         .ToList();
 
                     scheludedClass.Instructor = course.CourseInstructors
@@ -78,7 +78,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
             return scheduledClasses;
         }
 
-        public int GountConflicts(IEnumerable<ScheduledClass> scheduledClasses)
+        public int CountConflicts(IEnumerable<ScheduledClass> scheduledClasses)
         {
             int conflicts = 0;
 
@@ -107,7 +107,7 @@ namespace KNU.IS.ClassScheduling.Logic.Services
                         .Where(
                             c => c.Groups.Contains(g) &&
                             c.Course.Id == scheduledClass.Course.Id)
-                        .Count() > scheduledClass.Course.Hours
+                        .Count() > scheduledClass.Course.Hours 
                         ?
                         1 : 0;
                 }

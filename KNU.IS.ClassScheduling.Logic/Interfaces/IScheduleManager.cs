@@ -6,7 +6,7 @@ namespace KNU.IS.ClassScheduling.Logic.Interfaces
 {
     public interface IScheduleManager
     {
-        int GountConflicts(IEnumerable<ScheduledClass> scheduledClasses);
+        int CountConflicts(IEnumerable<ScheduledClass> scheduledClasses);
         Task<IEnumerable<ScheduledClass>> GenerateAsync();
     }
 }

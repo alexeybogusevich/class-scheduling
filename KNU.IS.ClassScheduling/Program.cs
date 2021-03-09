@@ -32,7 +32,7 @@ namespace KNU.IS.ClassScheduling
                 .AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(ConfigurationConstants.DatabaseName))
                 .AddScoped<IAlgorithmOutputManager<ScheduledClass>, BaseScheduleOutputManager>()
                 .AddScoped<IAlgorithmRunner, GeneticAlgorithmRunner<ScheduledClass>>()
-                .AddScoped<IGeneticAlgorithm<ScheduledClass>, SchedulingGeneticAlgorithm>()
+                .AddScoped<IGeneticAlgorithm<ScheduledClass>, ScheduleGeneticAlgorithm>()
                 .AddScoped<IScheduleManager, BaseScheduleManager>()
                 .Configure<GeneticOptions>(options => configuration.GetSection(nameof(GeneticOptions)).Bind(options))
                 .BuildServiceProvider();

@@ -11,7 +11,7 @@ namespace KNU.IS.ClassScheduling.Data.Configuration
             builder.HasKey(cg => new { cg.CourceId, cg.GroupId });
 
             builder.HasOne(cg => cg.Course)
-                .WithMany(c => c.CourceGroups)
+                .WithMany(c => c.CourseGroups)
                 .HasForeignKey(cg => cg.CourceId);
 
             builder.HasOne(cg => cg.Group)
