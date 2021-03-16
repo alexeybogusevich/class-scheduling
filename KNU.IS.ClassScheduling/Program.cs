@@ -4,6 +4,7 @@ using KNU.IS.ClassScheduling.Logic.Configuration;
 using KNU.IS.ClassScheduling.Logic.Interfaces;
 using KNU.IS.ClassScheduling.Logic.Models.Schedule;
 using KNU.IS.ClassScheduling.Logic.Services;
+using KNU.IS.ClassScheduling.Logic.Services.DomainProvider;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,11 @@ namespace KNU.IS.ClassScheduling
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(ConfigurationConstants.DatabaseName))
                 .AddScoped<IAlgorithmOutputManager<ScheduledClass>, BaseScheduleOutputManager>()
-                .AddScoped<IAlgorithmRunner, GeneticAlgorithmRunner<ScheduledClass>>()
-                .AddScoped<IGeneticAlgorithm<ScheduledClass>, ScheduleGeneticAlgorithm>()
+                .AddScoped<IAlgorithmRunner, BacktrackingSearchRunner<ScheduledClass>>()
+                .AddScoped<IBacktrackingAlgorithm<ScheduledClass>, ScheduleBacktrackingAlgorithm>()
+                .AddScoped<IDomainProvider, MRVDomainProvider>()
+                //.AddScoped<IAlgorithmRunner, GeneticAlgorithmRunner<ScheduledClass>>()
+                //.AddScoped<IGeneticAlgorithm<ScheduledClass>, ScheduleGeneticAlgorithm>()
                 .AddScoped<IScheduleManager, BaseScheduleManager>()
                 .Configure<GeneticOptions>(options => configuration.GetSection(nameof(GeneticOptions)).Bind(options))
                 .BuildServiceProvider();
